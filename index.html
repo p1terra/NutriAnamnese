@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anamnese Diária Nutricional</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
+        .section { margin-bottom: 25px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+        .nested { margin-left: 20px; margin-top: 10px; display: none; }
+        /* Mostra os campos de quantidade apenas se a opção principal for marcada */
+        input[type="checkbox"]:checked ~ .nested { display: block; }
+        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Questionário de Anamnese Diária Nutricional</h1>
+    <form id="anamneseForm">
+
+        <div class="section">
+            <label for="data">1. Data:</label>
+            <input type="date" id="data" required>
+        </div>
+
+        <div class="section">
+            <h3>2. Apetite</h3>
+            <p>Manhã:</p>
+            <label><input type="radio" name="apetiteManha" value="Baixo" required> Baixo</label>
+            <label><input type="radio" name="apetiteManha" value="Normal"> Normal</label>
+            <label><input type="radio" name="apetiteManha" value="Aumentado"> Aumentado</label>
+        </div>
+
+        <div class="section">
+            <h3>3. Refeições Realizadas</h3>
+            <h4>Café da manhã</h4>
+            
+            <div>
+                <label>
+                    <input type="checkbox" id="checkOvo" value="Ovo frito"> Ovo frito
+                </label>
+                <div class="nested">
+                    <label>Qtd: <input type="text" id="qtdOvo"></label>
+                </div>
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" id="checkPaoOutro" value="Pão (outro tipo)"> Pão (outro tipo)
+                </label>
+                <div class="nested">
+                    <label>Qual: <input type="text" id="qualPaoOutro"></label><br>
+                    <label>Qtd: <input type="text" id="qtdPaoOutro"></label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit">Salvar Respostas</button>
+    </form>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
