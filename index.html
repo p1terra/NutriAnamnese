@@ -5,57 +5,304 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anamnese Diária Nutricional</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; }
-        .section { margin-bottom: 25px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
-        .nested { margin-left: 20px; margin-top: 10px; display: none; }
-        /* Mostra os campos de quantidade apenas se a opção principal for marcada */
-        input[type="checkbox"]:checked ~ .nested { display: block; }
-        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background-color: #f9f9f9; color: #333; line-height: 1.6; }
+        h1 { text-align: center; color: #2c3e50; }
+        .section { background: #fff; margin-bottom: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        h3 { border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-top: 0; color: #3498db; }
+        h4 { margin-bottom: 10px; color: #2c3e50; }
+        .grid-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .field-group { margin-bottom: 8px; }
+        
+        /* Lógica para esconder/mostrar os subcampos (Qtd, Qual, Peso) */
+        .nested { display: none; margin-left: 25px; margin-top: 5px; padding: 5px; background: #f1f8ff; border-left: 3px solid #3498db; border-radius: 0 4px 4px 0; }
+        .nested input { width: 120px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="checkbox"]:checked ~ .nested, input[type="radio"]:checked ~ .nested { display: block; }
+        
+        .radio-group { margin-bottom: 10px; }
+        .radio-group p { margin: 5px 0; font-weight: bold; }
+        
+        button { display: block; width: 100%; padding: 15px; background-color: #27ae60; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+        button:hover { background-color: #219653; }
+        .date-input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <h1>Questionário de Anamnese Diária Nutricional</h1>
+    <h1>Questionário de Anamnese Diária</h1>
     <form id="anamneseForm">
 
         <div class="section">
-            <label for="data">1. Data:</label>
-            <input type="date" id="data" required>
+            <h3>1. Data</h3>
+            <input type="date" name="data_registro" class="date-input" required>
         </div>
 
         <div class="section">
-            <h3>2. Apetite</h3>
-            <p>Manhã:</p>
-            <label><input type="radio" name="apetiteManha" value="Baixo" required> Baixo</label>
-            <label><input type="radio" name="apetiteManha" value="Normal"> Normal</label>
-            <label><input type="radio" name="apetiteManha" value="Aumentado"> Aumentado</label>
+            <h3>2. Apetite: Como estava o seu apetite?</h3>
+            <div class="grid-options">
+                <div class="radio-group">
+                    <p>Manhã</p>
+                    <label><input type="radio" name="apetite_manha" value="Baixo"> Baixo</label><br>
+                    <label><input type="radio" name="apetite_manha" value="Normal"> Normal</label><br>
+                    <label><input type="radio" name="apetite_manha" value="Aumentado"> Aumentado</label>
+                </div>
+                <div class="radio-group">
+                    <p>Tarde</p>
+                    <label><input type="radio" name="apetite_tarde" value="Baixo"> Baixo</label><br>
+                    <label><input type="radio" name="apetite_tarde" value="Normal"> Normal</label><br>
+                    <label><input type="radio" name="apetite_tarde" value="Aumentado"> Aumentado</label>
+                </div>
+                <div class="radio-group">
+                    <p>Noite</p>
+                    <label><input type="radio" name="apetite_noite" value="Baixo"> Baixo</label><br>
+                    <label><input type="radio" name="apetite_noite" value="Normal"> Normal</label><br>
+                    <label><input type="radio" name="apetite_noite" value="Aumentado"> Aumentado</label>
+                </div>
+                <div class="radio-group">
+                    <p>Hora de dormir</p>
+                    <label><input type="radio" name="apetite_dormir" value="Baixo"> Baixo</label><br>
+                    <label><input type="radio" name="apetite_dormir" value="Normal"> Normal</label><br>
+                    <label><input type="radio" name="apetite_dormir" value="Aumentado"> Aumentado</label>
+                </div>
+            </div>
         </div>
 
         <div class="section">
-            <h3>3. Refeições Realizadas</h3>
+            <h3>3. Refeições realizadas</h3>
+            <p>Marque as refeições que fez hoje e o que comeu:</p>
+
             <h4>Café da manhã</h4>
-            
-            <div>
-                <label>
-                    <input type="checkbox" id="checkOvo" value="Ovo frito"> Ovo frito
-                </label>
-                <div class="nested">
-                    <label>Qtd: <input type="text" id="qtdOvo"></label>
-                </div>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="cafe_ovo" value="Sim"> Ovo frito <div class="nested"><input type="text" name="cafe_ovo_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_pao_int" value="Sim"> Pão de forma integral <div class="nested"><input type="text" name="cafe_pao_int_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_pao_bco" value="Sim"> Pão de forma branco <div class="nested"><input type="text" name="cafe_pao_bco_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_pao_fra" value="Sim"> Pão francês <div class="nested"><input type="text" name="cafe_pao_fra_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_pao_out" value="Sim"> Pão (outro tipo) <div class="nested"><input type="text" name="cafe_pao_out_qual" placeholder="Qual"><br><input type="text" name="cafe_pao_out_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_fruta" value="Sim"> Fruta <div class="nested"><input type="text" name="cafe_fruta_qual" placeholder="Qual"><br><input type="text" name="cafe_fruta_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_geleia" value="Sim"> Geléia <div class="nested"><input type="text" name="cafe_geleia_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_suco" value="Sim"> Copo de Suco <div class="nested"><input type="text" name="cafe_suco_qual" placeholder="Qual"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_cafe_puro" value="Sim"> Caneca de Café</div>
+                <div class="field-group"><input type="checkbox" name="cafe_cafe_leite" value="Sim"> Caneca de Café c/ leite</div>
+                <div class="field-group"><input type="checkbox" name="cafe_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="cafe_outro1_qual" placeholder="Qual"><br><input type="text" name="cafe_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="cafe_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="cafe_outro2_qual" placeholder="Qual"><br><input type="text" name="cafe_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
             </div>
 
-            <div>
-                <label>
-                    <input type="checkbox" id="checkPaoOutro" value="Pão (outro tipo)"> Pão (outro tipo)
-                </label>
-                <div class="nested">
-                    <label>Qual: <input type="text" id="qualPaoOutro"></label><br>
-                    <label>Qtd: <input type="text" id="qtdPaoOutro"></label>
+            <h4>Lanche da manhã</h4>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="lmanha_bisc_salg" value="Sim"> Biscoito salgado <div class="nested"><input type="text" name="lmanha_bisc_salg_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="lmanha_bisc_doce" value="Sim"> Biscoito doce <div class="nested"><input type="text" name="lmanha_bisc_doce_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="lmanha_fruta" value="Sim"> Fruta <div class="nested"><input type="text" name="lmanha_fruta_qual" placeholder="Qual"><br><input type="text" name="lmanha_fruta_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="lmanha_iogurte" value="Sim"> Iogurte desnatado c/ fruta</div>
+                <div class="field-group"><input type="checkbox" name="lmanha_barra" value="Sim"> Barra de cereal</div>
+                <div class="field-group"><input type="checkbox" name="lmanha_cha" value="Sim"> Xícara de chá</div>
+                <div class="field-group"><input type="checkbox" name="lmanha_cafe" value="Sim"> Xícara de Café</div>
+                <div class="field-group"><input type="checkbox" name="lmanha_cappuccino" value="Sim"> Xícara de Cappuccino</div>
+                <div class="field-group"><input type="checkbox" name="lmanha_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="lmanha_outro1_qual" placeholder="Qual"><br><input type="text" name="lmanha_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="lmanha_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="lmanha_outro2_qual" placeholder="Qual"><br><input type="text" name="lmanha_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="lmanha_outro3" value="Sim"> Outro 3 <div class="nested"><input type="text" name="lmanha_outro3_qual" placeholder="Qual"><br><input type="text" name="lmanha_outro3_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+            </div>
+
+            <h4>Almoço</h4>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="almoco_arroz" value="Sim"> Arroz <div class="nested"><input type="text" name="almoco_arroz_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_macaxeira" value="Sim"> Macaxeira <div class="nested"><input type="text" name="almoco_macaxeira_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_batata_doce" value="Sim"> Batata doce <div class="nested"><input type="text" name="almoco_batata_doce_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_macarrao" value="Sim"> Macarrão <div class="nested"><input type="text" name="almoco_macarrao_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outro_carbo" value="Sim"> Outro carboidrato <div class="nested"><input type="text" name="almoco_outro_carbo_qual" placeholder="Qual"><br><input type="text" name="almoco_outro_carbo_qtd" placeholder="Qtd/Peso" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_farofa" value="Sim"> Farofa <div class="nested"><input type="text" name="almoco_farofa_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_feijao_preto" value="Sim"> Feijão preto <div class="nested"><input type="text" name="almoco_feijao_preto_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_feijao_carioca" value="Sim"> Feijão carioca <div class="nested"><input type="text" name="almoco_feijao_carioca_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_feijao_branco" value="Sim"> Feijão Branco <div class="nested"><input type="text" name="almoco_feijao_branco_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_feijao_verde" value="Sim"> Feijão Verde <div class="nested"><input type="text" name="almoco_feijao_verde_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_salada_crua" value="Sim"> Salada Crua <div class="nested"><input type="text" name="almoco_salada_crua_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_legumes" value="Sim"> Legumes cozidos <div class="nested"><input type="text" name="almoco_legumes_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outra_salada" value="Sim"> Outro tipo de salada <div class="nested"><input type="text" name="almoco_outra_salada_qual" placeholder="Qual"><br><input type="text" name="almoco_outra_salada_qtd" placeholder="Qtd/Peso" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_carne_verm" value="Sim"> Carne vermelha <div class="nested"><input type="text" name="almoco_carne_verm_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_porco" value="Sim"> Porco <div class="nested"><input type="text" name="almoco_porco_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_frango" value="Sim"> Frango <div class="nested"><input type="text" name="almoco_frango_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outra_carne" value="Sim"> Outra carne <div class="nested"><input type="text" name="almoco_outra_carne_qual" placeholder="Qual"><br><input type="text" name="almoco_outra_carne_peso" placeholder="Peso (g)" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_fruta" value="Sim"> Fruta pós <div class="nested"><input type="text" name="almoco_fruta_qual" placeholder="Qual"><br><input type="text" name="almoco_fruta_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_bebida" value="Sim"> Bebida <div class="nested"><input type="text" name="almoco_bebida_qual" placeholder="Qual"><br><input type="text" name="almoco_bebida_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_cafe" value="Sim"> Xícara de Café</div>
+                <div class="field-group"><input type="checkbox" name="almoco_cappuccino" value="Sim"> Xícara de Cappuccino</div>
+                <div class="field-group"><input type="checkbox" name="almoco_sobremesa" value="Sim"> Sobremesa <div class="nested"><input type="text" name="almoco_sobremesa_qual" placeholder="Qual"><br><input type="text" name="almoco_sobremesa_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="almoco_outro1_qual" placeholder="Qual"><br><input type="text" name="almoco_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="almoco_outro2_qual" placeholder="Qual"><br><input type="text" name="almoco_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outro3" value="Sim"> Outro 3 <div class="nested"><input type="text" name="almoco_outro3_qual" placeholder="Qual"><br><input type="text" name="almoco_outro3_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+            </div>
+
+            <h4>Lanche da tarde</h4>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="ltarde_bisc_salg" value="Sim"> Biscoito salgado <div class="nested"><input type="text" name="ltarde_bisc_salg_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="ltarde_bisc_doce" value="Sim"> Biscoito doce <div class="nested"><input type="text" name="ltarde_bisc_doce_qtd" placeholder="Qtd"></div></div>
+                <div class="field-group"><input type="checkbox" name="ltarde_fruta" value="Sim"> Fruta <div class="nested"><input type="text" name="ltarde_fruta_qual" placeholder="Qual"><br><input type="text" name="ltarde_fruta_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="ltarde_iogurte" value="Sim"> Iogurte desnatado c/ fruta</div>
+                <div class="field-group"><input type="checkbox" name="ltarde_barra" value="Sim"> Barra de cereal</div>
+                <div class="field-group"><input type="checkbox" name="ltarde_cha" value="Sim"> Xícara de chá</div>
+                <div class="field-group"><input type="checkbox" name="ltarde_cafe" value="Sim"> Xícara de Café</div>
+                <div class="field-group"><input type="checkbox" name="ltarde_cappuccino" value="Sim"> Xícara de Cappuccino</div>
+                <div class="field-group"><input type="checkbox" name="ltarde_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="ltarde_outro1_qual" placeholder="Qual"><br><input type="text" name="ltarde_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="ltarde_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="ltarde_outro2_qual" placeholder="Qual"><br><input type="text" name="ltarde_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="ltarde_outro3" value="Sim"> Outro 3 <div class="nested"><input type="text" name="ltarde_outro3_qual" placeholder="Qual"><br><input type="text" name="ltarde_outro3_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+            </div>
+
+            <h4>Jantar</h4>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="jantar_arroz" value="Sim"> Arroz <div class="nested"><input type="text" name="jantar_arroz_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_macaxeira" value="Sim"> Macaxeira <div class="nested"><input type="text" name="jantar_macaxeira_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_batata_doce" value="Sim"> Batata doce <div class="nested"><input type="text" name="jantar_batata_doce_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_macarrao" value="Sim"> Macarrão <div class="nested"><input type="text" name="jantar_macarrao_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_outro_carbo" value="Sim"> Outro carboidrato <div class="nested"><input type="text" name="jantar_outro_carbo_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_farofa" value="Sim"> Farofa <div class="nested"><input type="text" name="jantar_farofa_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_feijao_preto" value="Sim"> Feijão preto <div class="nested"><input type="text" name="jantar_feijao_preto_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_feijao_carioca" value="Sim"> Feijão carioca <div class="nested"><input type="text" name="jantar_feijao_carioca_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_feijao_branco" value="Sim"> Feijão Branco <div class="nested"><input type="text" name="jantar_feijao_branco_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_feijao_verde" value="Sim"> Feijão Verde <div class="nested"><input type="text" name="jantar_feijao_verde_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_salada_crua" value="Sim"> Salada Crua <div class="nested"><input type="text" name="jantar_salada_crua_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_legumes" value="Sim"> Legumes cozidos <div class="nested"><input type="text" name="jantar_legumes_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_outra_salada" value="Sim"> Outra salada <div class="nested"><input type="text" name="jantar_outra_salada_qual" placeholder="Qual"><br><input type="text" name="jantar_outra_salada_peso" placeholder="Peso (g)" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_carne_verm" value="Sim"> Carne vermelha <div class="nested"><input type="text" name="jantar_carne_verm_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_porco" value="Sim"> Porco <div class="nested"><input type="text" name="jantar_porco_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_frango" value="Sim"> Frango <div class="nested"><input type="text" name="jantar_frango_peso" placeholder="Peso (g)"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_outra_carne" value="Sim"> Outra carne <div class="nested"><input type="text" name="jantar_outra_carne_qual" placeholder="Qual"><br><input type="text" name="jantar_outra_carne_peso" placeholder="Peso (g)" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_fruta" value="Sim"> Fruta <div class="nested"><input type="text" name="jantar_fruta_qual" placeholder="Qual"><br><input type="text" name="jantar_fruta_peso" placeholder="Peso (g)" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_bebida" value="Sim"> Bebida <div class="nested"><input type="text" name="jantar_bebida_qual" placeholder="Qual"><br><input type="text" name="jantar_bebida_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_cafe" value="Sim"> Xícara de Café</div>
+                <div class="field-group"><input type="checkbox" name="jantar_cappuccino" value="Sim"> Xícara de Cappuccino</div>
+                <div class="field-group"><input type="checkbox" name="jantar_sobremesa" value="Sim"> Sobremesa <div class="nested"><input type="text" name="jantar_sobremesa_qual" placeholder="Qual"><br><input type="text" name="jantar_sobremesa_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="jantar_outro1_qual" placeholder="Qual"><br><input type="text" name="jantar_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="jantar_outro2_qual" placeholder="Qual"><br><input type="text" name="jantar_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="jantar_outro3" value="Sim"> Outro 3 <div class="nested"><input type="text" name="jantar_outro3_qual" placeholder="Qual"><br><input type="text" name="jantar_outro3_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+            </div>
+
+            <h4>Ceia (descreva)</h4>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="ceia_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="ceia_outro1_qual" placeholder="Qual"><br><input type="text" name="ceia_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="ceia_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="ceia_outro2_qual" placeholder="Qual"><br><input type="text" name="ceia_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="ceia_outro3" value="Sim"> Outro 3 <div class="nested"><input type="text" name="ceia_outro3_qual" placeholder="Qual"><br><input type="text" name="ceia_outro3_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>4. Consumo de água: Quantos litros (ou copos) bebeu?</h3>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="agua_antes_cafe" value="Sim"> Antes do café <div class="nested"><input type="number" name="agua_antes_cafe_copos" placeholder="Qtd de copos"></div></div>
+                <div class="field-group"><input type="checkbox" name="agua_manha" value="Sim"> Manhã <div class="nested"><input type="number" name="agua_manha_copos" placeholder="Qtd de copos"></div></div>
+                <div class="field-group"><input type="checkbox" name="agua_tarde" value="Sim"> Tarde <div class="nested"><input type="number" name="agua_tarde_copos" placeholder="Qtd de copos"></div></div>
+                <div class="field-group"><input type="checkbox" name="agua_noite" value="Sim"> Noite <div class="nested"><input type="number" name="agua_noite_copos" placeholder="Qtd de copos"></div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>5. Excessos ou Exceções</h3>
+            <p>Houve algum consumo fora do planejado na dieta?</p>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="excecao_alcool" value="Sim"> Bebida alcoólica <div class="nested"><input type="text" name="excecao_alcool_qual" placeholder="Qual"><br><input type="text" name="excecao_alcool_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="excecao_fritura" value="Sim"> Frituras <div class="nested"><input type="text" name="excecao_fritura_qual" placeholder="Qual"><br><input type="text" name="excecao_fritura_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="excecao_doce" value="Sim"> Doces <div class="nested"><input type="text" name="excecao_doce_qual" placeholder="Qual"><br><input type="text" name="excecao_doce_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="excecao_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="excecao_outro1_qual" placeholder="Qual"><br><input type="text" name="excecao_outro1_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="excecao_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="excecao_outro2_qual" placeholder="Qual"><br><input type="text" name="excecao_outro2_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="excecao_outro3" value="Sim"> Outro 3 <div class="nested"><input type="text" name="excecao_outro3_qual" placeholder="Qual"><br><input type="text" name="excecao_outro3_qtd" placeholder="Qtd" style="margin-top:5px;"></div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>6. Sinais, Sintomas e Digestão</h3>
+            <p>Disposição física: Como estava sua energia hoje?</p>
+            <div class="grid-options">
+                <div class="radio-group">
+                    <p>Manhã</p>
+                    <label><input type="radio" name="energia_manha" value="Baixo"> Baixo/Exausto</label><br>
+                    <label><input type="radio" name="energia_manha" value="Normal"> Normal/Ok</label><br>
+                    <label><input type="radio" name="energia_manha" value="Muito disposto"> Muito disposto</label>
+                </div>
+                <div class="radio-group">
+                    <p>Tarde</p>
+                    <label><input type="radio" name="energia_tarde" value="Baixo"> Cansado/Exausto</label><br>
+                    <label><input type="radio" name="energia_tarde" value="Normal"> Normal/Ok</label><br>
+                    <label><input type="radio" name="energia_tarde" value="Muito disposto"> Muito disposto</label>
+                </div>
+                <div class="radio-group">
+                    <p>Noite</p>
+                    <label><input type="radio" name="energia_noite" value="Baixo"> Cansado/Exausto</label><br>
+                    <label><input type="radio" name="energia_noite" value="Normal"> Normal/Ok</label><br>
+                    <label><input type="radio" name="energia_noite" value="Muito disposto"> Muito disposto</label>
+                </div>
+                <div class="radio-group">
+                    <p>Hora de dormir</p>
+                    <label><input type="radio" name="energia_dormir" value="Baixo"> Cansado/Exausto</label><br>
+                    <label><input type="radio" name="energia_dormir" value="Normal"> Normal/Ok</label><br>
+                    <label><input type="radio" name="energia_dormir" value="Muito disposto"> Muito disposto</label>
                 </div>
             </div>
         </div>
 
-        <button type="submit">Salvar Respostas</button>
+        <div class="section">
+            <h3>7. Funcionamento intestinal</h3>
+            <p>Como foi sua evacuação hoje?</p>
+            <label><input type="radio" name="intestino" value="Não evacuei"> Não evacuei</label><br>
+            <label><input type="radio" name="intestino" value="Normal"> Normal</label><br>
+            <label><input type="radio" name="intestino" value="Constipado/Ressecado"> Constipado/Ressecado</label><br>
+            <label><input type="radio" name="intestino" value="Diarreia/Amolecido"> Diarreia/Amolecido</label>
+        </div>
+
+        <div class="section">
+            <h3>8. Sentiu algum desconforto após comer?</h3>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="desconforto_gases" value="Sim"> Gases / Estufamento <div class="nested"><label><input type="checkbox" name="gases_manha" value="Sim"> Manhã</label> <label><input type="checkbox" name="gases_tarde" value="Sim"> Tarde</label> <label><input type="checkbox" name="gases_noite" value="Sim"> Noite</label></div></div>
+                <div class="field-group"><input type="checkbox" name="desconforto_azia" value="Sim"> Azia / Queimação <div class="nested"><label><input type="checkbox" name="azia_manha" value="Sim"> Manhã</label> <label><input type="checkbox" name="azia_tarde" value="Sim"> Tarde</label> <label><input type="checkbox" name="azia_noite" value="Sim"> Noite</label></div></div>
+                <div class="field-group"><input type="checkbox" name="desconforto_nausea" value="Sim"> Náusea <div class="nested"><label><input type="checkbox" name="nausea_manha" value="Sim"> Manhã</label> <label><input type="checkbox" name="nausea_tarde" value="Sim"> Tarde</label> <label><input type="checkbox" name="nausea_noite" value="Sim"> Noite</label></div></div>
+                <div class="field-group"><input type="checkbox" name="desconforto_colica" value="Sim"> Cólica abdominal <div class="nested"><label><input type="checkbox" name="colica_manha" value="Sim"> Manhã</label> <label><input type="checkbox" name="colica_tarde" value="Sim"> Tarde</label> <label><input type="checkbox" name="colica_noite" value="Sim"> Noite</label></div></div>
+                <div class="field-group"><input type="checkbox" name="desconforto_nenhum" value="Sim"> Nenhum desconforto <div class="nested"><label><input type="checkbox" name="nenhum_manha" value="Sim"> Manhã</label> <label><input type="checkbox" name="nenhum_tarde" value="Sim"> Tarde</label> <label><input type="checkbox" name="nenhum_noite" value="Sim"> Noite</label></div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>9. Qualidade do sono da noite anterior</h3>
+            <div class="grid-options">
+                <div class="radio-group">
+                    <p>Qtd de horas dormidas</p>
+                    <label><input type="radio" name="sono_horas" value="< 5h"> < 5h</label><br>
+                    <label><input type="radio" name="sono_horas" value="5h à 6h"> 5h à 6h</label><br>
+                    <label><input type="radio" name="sono_horas" value="6h à 7h"> 6h à 7h</label><br>
+                    <label><input type="radio" name="sono_horas" value="> 7h"> > 7h</label>
+                </div>
+                <div class="radio-group">
+                    <p>Como você dormiu?</p>
+                    <label><input type="radio" name="sono_qualidade" value="Mal"> Mal (acordei cansado)</label><br>
+                    <label><input type="radio" name="sono_qualidade" value="Regular"> Regular</label><br>
+                    <label><input type="radio" name="sono_qualidade" value="Muito bem"> Muito bem (descansado)</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>10. Rotina e Estilo de Vida</h3>
+            <div class="radio-group">
+                <p>Nível de estresse/ansiedade:</p>
+                <label><input type="radio" name="estresse" value="Baixo"> Baixo</label>
+                <label><input type="radio" name="estresse" value="Moderado"> Moderado</label>
+                <label><input type="radio" name="estresse" value="Alto"> Alto</label>
+            </div>
+            
+            <div class="field-group" style="margin-top: 15px;">
+                <p>Exercício físico: Fez alguma atividade hoje?</p>
+                <label><input type="radio" name="exercicio" value="Não"> Não</label><br>
+                <label><input type="radio" name="exercicio" value="Sim"> Sim <div class="nested"><input type="text" name="exercicio_qual" placeholder="Qual"><br><input type="text" name="exercicio_tempo" placeholder="Tempo" style="margin-top:5px;"></div></label>
+            </div>
+
+            <p style="margin-top: 15px;">Uso de medicações/suplementos:</p>
+            <div class="grid-options">
+                <div class="field-group"><input type="checkbox" name="med_rybelsus" value="Sim"> Rybelsus</div>
+                <div class="field-group"><input type="checkbox" name="med_topiramato" value="Sim"> Topiramato</div>
+                <div class="field-group"><input type="checkbox" name="med_b12" value="Sim"> Vitamina B12</div>
+                <div class="field-group"><input type="checkbox" name="med_sibutramina" value="Sim"> Sibutramina</div>
+                <div class="field-group"><input type="checkbox" name="med_donaren" value="Sim"> Donaren</div>
+                <div class="field-group"><input type="checkbox" name="med_outro1" value="Sim"> Outro 1 <div class="nested"><input type="text" name="med_outro1_qual" placeholder="Qual"></div></div>
+                <div class="field-group"><input type="checkbox" name="med_outro2" value="Sim"> Outro 2 <div class="nested"><input type="text" name="med_outro2_qual" placeholder="Qual"></div></div>
+            </div>
+        </div>
+
+        <button type="submit">Salvar Questionário Diário</button>
     </form>
 
     <script type="module" src="app.js"></script>
