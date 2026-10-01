@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anamnese Diária Nutricional</title>
+    <!-- Biblioteca para gerar o arquivo Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; background-color: #f9f9f9; color: #333; line-height: 1.6; }
         h1 { text-align: center; color: #2c3e50; }
         .section { background: #fff; margin-bottom: 25px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .section-export { background: #eaf2f8; border-color: #b9d7ea; }
         h3 { border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-top: 0; color: #3498db; }
         h4 { margin-bottom: 10px; color: #2c3e50; }
         .grid-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .field-group { margin-bottom: 8px; }
         
-        /* Lógica para esconder/mostrar os subcampos (Qtd, Qual, Peso) */
         .nested { display: none; margin-left: 25px; margin-top: 5px; padding: 5px; background: #f1f8ff; border-left: 3px solid #3498db; border-radius: 0 4px 4px 0; }
         .nested input { width: 120px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; }
         input[type="checkbox"]:checked ~ .nested, input[type="radio"]:checked ~ .nested { display: block; }
@@ -21,22 +23,40 @@
         .radio-group { margin-bottom: 10px; }
         .radio-group p { margin: 5px 0; font-weight: bold; }
         
-        button { display: block; width: 100%; padding: 15px; background-color: #27ae60; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s; }
+        button { display: block; width: 100%; padding: 15px; background-color: #27ae60; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s; margin-bottom: 15px; }
         button:hover { background-color: #219653; }
-        .date-input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+        .btn-blue { background-color: #2980b9; }
+        .btn-blue:hover { background-color: #1f618d; }
+        
+        .input-text { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; width: 100%; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
     <h1>Questionário de Anamnese Diária</h1>
-    <h1>ver1</h1>
+    
     <form id="anamneseForm">
 
+        <!-- 1. DADOS INICIAIS -->
         <div class="section">
-            <h3>1. Data</h3>
-            <input type="date" name="data_registro" class="date-input" required>
+            <h3>1. Dados do Registro</h3>
+            <div class="grid-options">
+                <div class="field-group">
+                    <label><strong>Data:</strong></label><br>
+                    <input type="date" name="data_registro" class="input-text" required>
+                </div>
+                <div class="field-group">
+                    <label><strong>Participante:</strong></label><br>
+                    <select name="participante" class="input-text" required>
+                        <option value="">Selecione...</option>
+                        <option value="Iagê">Iagê</option>
+                        <option value="Radmila">Radmila</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
+        <!-- 2. APETITE -->
         <div class="section">
             <h3>2. Apetite: Como estava o seu apetite?</h3>
             <div class="grid-options">
@@ -67,6 +87,7 @@
             </div>
         </div>
 
+        <!-- 3. REFEIÇÕES -->
         <div class="section">
             <h3>3. Refeições realizadas</h3>
             <p>Marque as refeições que fez hoje e o que comeu:</p>
@@ -116,7 +137,7 @@
                 <div class="field-group"><input type="checkbox" name="almoco_feijao_verde" value="Sim"> Feijão Verde <div class="nested"><input type="text" name="almoco_feijao_verde_peso" placeholder="Peso (g)"></div></div>
                 <div class="field-group"><input type="checkbox" name="almoco_salada_crua" value="Sim"> Salada Crua <div class="nested"><input type="text" name="almoco_salada_crua_peso" placeholder="Peso (g)"></div></div>
                 <div class="field-group"><input type="checkbox" name="almoco_legumes" value="Sim"> Legumes cozidos <div class="nested"><input type="text" name="almoco_legumes_peso" placeholder="Peso (g)"></div></div>
-                <div class="field-group"><input type="checkbox" name="almoco_outra_salada" value="Sim"> Outro tipo de salada <div class="nested"><input type="text" name="almoco_outra_salada_qual" placeholder="Qual"><br><input type="text" name="almoco_outra_salada_qtd" placeholder="Qtd/Peso" style="margin-top:5px;"></div></div>
+                <div class="field-group"><input type="checkbox" name="almoco_outra_salada" value="Sim"> Outra salada <div class="nested"><input type="text" name="almoco_outra_salada_qual" placeholder="Qual"><br><input type="text" name="almoco_outra_salada_peso" placeholder="Peso (g)" style="margin-top:5px;"></div></div>
                 <div class="field-group"><input type="checkbox" name="almoco_carne_verm" value="Sim"> Carne vermelha <div class="nested"><input type="text" name="almoco_carne_verm_peso" placeholder="Peso (g)"></div></div>
                 <div class="field-group"><input type="checkbox" name="almoco_porco" value="Sim"> Porco <div class="nested"><input type="text" name="almoco_porco_peso" placeholder="Peso (g)"></div></div>
                 <div class="field-group"><input type="checkbox" name="almoco_frango" value="Sim"> Frango <div class="nested"><input type="text" name="almoco_frango_peso" placeholder="Peso (g)"></div></div>
@@ -183,6 +204,7 @@
             </div>
         </div>
 
+        <!-- 4. CONSUMO DE ÁGUA -->
         <div class="section">
             <h3>4. Consumo de água: Quantos litros (ou copos) bebeu?</h3>
             <div class="grid-options">
@@ -193,6 +215,7 @@
             </div>
         </div>
 
+        <!-- 5. EXCEÇÕES -->
         <div class="section">
             <h3>5. Excessos ou Exceções</h3>
             <p>Houve algum consumo fora do planejado na dieta?</p>
@@ -206,6 +229,7 @@
             </div>
         </div>
 
+        <!-- 6. SINAIS E SINTOMAS -->
         <div class="section">
             <h3>6. Sinais, Sintomas e Digestão</h3>
             <p>Disposição física: Como estava sua energia hoje?</p>
@@ -237,6 +261,7 @@
             </div>
         </div>
 
+        <!-- 7. INTESTINO -->
         <div class="section">
             <h3>7. Funcionamento intestinal</h3>
             <p>Como foi sua evacuação hoje?</p>
@@ -246,6 +271,7 @@
             <label><input type="radio" name="intestino" value="Diarreia/Amolecido"> Diarreia/Amolecido</label>
         </div>
 
+        <!-- 8. DESCONFORTO -->
         <div class="section">
             <h3>8. Sentiu algum desconforto após comer?</h3>
             <div class="grid-options">
@@ -257,15 +283,16 @@
             </div>
         </div>
 
+        <!-- 9. SONO -->
         <div class="section">
             <h3>9. Qualidade do sono da noite anterior</h3>
             <div class="grid-options">
                 <div class="radio-group">
                     <p>Qtd de horas dormidas</p>
-                    <label><input type="radio" name="sono_horas" value="< 5h"> &lt 5h</label><br>
+                    <label><input type="radio" name="sono_horas" value="Menos de 5h"> &lt; 5h</label><br>
                     <label><input type="radio" name="sono_horas" value="5h à 6h"> 5h à 6h</label><br>
                     <label><input type="radio" name="sono_horas" value="6h à 7h"> 6h à 7h</label><br>
-                    <label><input type="radio" name="sono_horas" value="> 7h"> &gt 7h</label>
+                    <label><input type="radio" name="sono_horas" value="Mais de 7h"> &gt; 7h</label>
                 </div>
                 <div class="radio-group">
                     <p>Como você dormiu?</p>
@@ -276,6 +303,7 @@
             </div>
         </div>
 
+        <!-- 10. ROTINA E ESTILO DE VIDA -->
         <div class="section">
             <h3>10. Rotina e Estilo de Vida</h3>
             <div class="radio-group">
@@ -305,7 +333,33 @@
 
         <button type="submit">Salvar Questionário Diário</button>
     </form>
+    
+    <!-- ÁREA DE EXPORTAÇÃO PARA EXCEL -->
+    <div class="section section-export">
+        <h3>📥 Exportar Dados (Excel)</h3>
+        <p style="font-size: 14px; margin-bottom: 15px;">Selecione os filtros abaixo para baixar a planilha com as respostas salvas.</p>
+        <div class="grid-options">
+            <div class="field-group">
+                <label><strong>Participante:</strong></label><br>
+                <select id="export_participante" class="input-text">
+                    <option value="Todos">Todos</option>
+                    <option value="Iagê">Iagê</option>
+                    <option value="Radmila">Radmila</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label><strong>Data Inicial (Opcional):</strong></label><br>
+                <input type="date" id="export_data_inicio" class="input-text">
+            </div>
+            <div class="field-group">
+                <label><strong>Data Final (Opcional):</strong></label><br>
+                <input type="date" id="export_data_fim" class="input-text">
+            </div>
+        </div>
+        <button type="button" id="btnExportar" class="btn-blue">Baixar Planilha Excel (.xlsx)</button>
+    </div>
 
+    <!-- O link para o seu script que fará o salvamento e a exportação -->
     <script type="module" src="app.js"></script>
 </body>
 </html>
