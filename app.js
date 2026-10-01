@@ -1,5 +1,5 @@
 // Importando o Firebase (versão modular)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // SUAS CONFIGURAÇÕES DO FIREBASE AQUI
